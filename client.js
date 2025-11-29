@@ -3,7 +3,7 @@
 
 // 1. Play audio with chord support
 function playNote(noteName) {
-  // sounds/ folder is next to index.html
+  // mp3 files are inside the "sounds" folder next to index.html
   const file = `sounds/${noteName}.mp3`;
   const sound = new Audio(file);
   sound.currentTime = 0;
@@ -15,7 +15,7 @@ const keys = document.querySelectorAll(".key");
 const statusText = document.getElementById("statusText");
 const activityLog = document.getElementById("activityLog");
 
-// log helper
+// Activity log helper
 function addActivityEntry(text, who) {
   const div = document.createElement("div");
   div.className = "activity-log-entry " + who;
@@ -24,7 +24,7 @@ function addActivityEntry(text, who) {
   activityLog.scrollTop = activityLog.scrollHeight;
 }
 
-// visual key flash
+// Highlight keys visually
 function flashKey(noteName, who) {
   const key = document.querySelector(`.key[data-note="${noteName}"]`);
   if (!key) return;
@@ -37,8 +37,18 @@ function flashKey(noteName, who) {
   }, 200);
 }
 
-// 3. WebSocket connection (always to localhost:3000)
-const socket = new WebSocket("ws://localhost:3000");
+// 3. WebSocket connection
+// If running locally → connect to localhost:3000
+// If running from GitHub Pages or elsewhere → connect to Render
+const isLocal =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1";
+
+const WS_URL = isLocal
+  ? "ws://localhost:3000"
+  : "wss://assignment-4-xv6l.onrender.com";
+
+const socket = new WebSocket(WS_URL);
 
 socket.addEventListener("open", () => {
   statusText.textContent = "Connected. Waiting for another player...";
@@ -68,10 +78,15 @@ socket.addEventListener("message", (event) => {
   }
 });
 
+socket.addEventListener("close", () => {
+  statusText.textContent = "Disconnected from server.";
+});
+
 // 4. Mouse click → play + send
 keys.forEach((key) => {
   key.addEventListener("click", () => {
     const noteName = key.dataset.note;
+    if (!noteName) return;
 
     playNote(noteName);
     flashKey(noteName, "self");
