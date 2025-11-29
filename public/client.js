@@ -1,9 +1,7 @@
 // public/client.js
 // Piano UI + sound + WebSocket + keyboard + chords
 
-// ------------------------------
 // 1. CHORD-SUPPORTING AUDIO
-// ------------------------------
 function playNote(noteName) {
   const file = `sounds/${noteName}.mp3`;
   const sound = new Audio(file);
@@ -11,14 +9,12 @@ function playNote(noteName) {
   sound.play().catch(() => {});
 }
 
-// ------------------------------
 // 2. DOM references
-// ------------------------------
 const keys = document.querySelectorAll(".key");
 const statusText = document.getElementById("statusText");
 const activityLog = document.getElementById("activityLog");
 
-// Activity log
+// Activity log helper
 function addActivityEntry(text, who) {
   const div = document.createElement("div");
   div.className = "activity-log-entry " + who;
@@ -41,10 +37,7 @@ function flashKey(noteName, who) {
   }, 200);
 }
 
-// ------------------------------
-// 3. WebSocket connection
-// ------------------------------
-// Force connection to localhost:3000
+// 3. WebSocket connection (fixed to localhost:3000)
 const socket = new WebSocket("ws://localhost:3000");
 
 socket.addEventListener("open", () => {
@@ -52,7 +45,13 @@ socket.addEventListener("open", () => {
 });
 
 socket.addEventListener("message", (event) => {
-  let data = JSON.parse(event.data);
+  let data;
+  try {
+    data = JSON.parse(event.data);
+  } catch (e) {
+    console.log("Invalid message from server:", event.data);
+    return;
+  }
 
   if (data.type === "playerCount") {
     if (data.count === 1) {
@@ -62,7 +61,6 @@ socket.addEventListener("message", (event) => {
     }
   }
 
-  // Partner played a note
   if (data.type === "note") {
     playNote(data.note);
     flashKey(data.note, "partner");
@@ -70,9 +68,7 @@ socket.addEventListener("message", (event) => {
   }
 });
 
-// ------------------------------
-// 4. Mouse click support
-// ------------------------------
+// 4. Mouse click
 keys.forEach((key) => {
   key.addEventListener("click", () => {
     const noteName = key.dataset.note;
@@ -89,10 +85,7 @@ keys.forEach((key) => {
   });
 });
 
-// ------------------------------
-// 5. KEYBOARD + CHORD SUPPORT
-// ------------------------------
-// Keyboard → piano note mapping
+// 5. Keyboard + chords
 const keyToNote = {
   a: "C",
   w: "Csharp",
@@ -111,7 +104,7 @@ const keyToNote = {
 document.addEventListener("keydown", (event) => {
   const key = event.key.toLowerCase();
   const noteName = keyToNote[key];
-  if (!noteName) return; // not a mapped key
+  if (!noteName) return;
 
   // You play
   playNote(noteName);

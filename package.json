@@ -1,17 +1,13 @@
 {
   "name": "assignment-4-collaboration",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Soft Hands Mini Piano - real-time collaborative mini piano with Node.js and WebSockets",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0",
-    "ws": "^8.18.3"
-  },
-  "description": ""
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  }
 }

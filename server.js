@@ -7,8 +7,8 @@ const WebSocket = require("ws");
 
 const app = express();
 
-// Use port 4000 to avoid conflicts
-const PORT = process.env.PORT || 4000;
+// Use port 3000 for local testing
+const PORT = process.env.PORT || 3000;
 
 // Serve files from the "public" folder
 app.use(express.static("public"));
@@ -40,28 +40,34 @@ wss.on("connection", (ws) => {
       return;
     }
 
+    // Only handle "note" messages (piano notes)
     if (data.type === "note") {
       broadcastToOthers(ws, data);
     }
   });
 
   ws.on("close", () => {
+    console.log("Client disconnected");
     clients = clients.filter((c) => c !== ws);
     updatePlayerCount();
   });
 });
 
+// Send updated number of players to all clients
 function updatePlayerCount() {
   const msg = JSON.stringify({
     type: "playerCount",
-    count: clients.length,
+    count: clients.length
   });
 
   clients.forEach((c) => {
-    if (c.readyState === WebSocket.OPEN) c.send(msg);
+    if (c.readyState === WebSocket.OPEN) {
+      c.send(msg);
+    }
   });
 }
 
+// Send a message to all clients except the sender
 function broadcastToOthers(sender, data) {
   const msg = JSON.stringify(data);
   clients.forEach((client) => {
