@@ -1,9 +1,8 @@
 
 // Piano UI + sound + WebSocket + keyboard + chords
 
-// Play audio with chord support
 function playNote(noteName) {
-  // mp3 files are inside the "sounds" folder next to index.html
+  // mp3 files "sounds"
   const file = `sounds/${noteName}.mp3`;
   const sound = new Audio(file);
   sound.currentTime = 0;
