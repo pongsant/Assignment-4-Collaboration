@@ -1,7 +1,7 @@
 // client.js
 // Piano UI + sound + WebSocket + keyboard + chords
 
-// 1. Play audio with chord support
+// Play audio with chord support
 function playNote(noteName) {
   // mp3 files are inside the "sounds" folder next to index.html
   const file = `sounds/${noteName}.mp3`;
@@ -10,7 +10,7 @@ function playNote(noteName) {
   sound.play().catch(() => {});
 }
 
-// 2. DOM references
+// DOM references
 const keys = document.querySelectorAll(".key");
 const statusText = document.getElementById("statusText");
 const activityLog = document.getElementById("activityLog");
@@ -37,9 +37,7 @@ function flashKey(noteName, who) {
   }, 200);
 }
 
-// 3. WebSocket connection
-// If running locally → connect to localhost:3000
-// If running from GitHub Pages or elsewhere → connect to Render
+// WebSocket connection
 const isLocal =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1";
