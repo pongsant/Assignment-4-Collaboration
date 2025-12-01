@@ -1,4 +1,4 @@
-// client.js
+
 // Piano UI + sound + WebSocket + keyboard + chords
 
 // Play audio with chord support
@@ -80,7 +80,7 @@ socket.addEventListener("close", () => {
   statusText.textContent = "Disconnected from server.";
 });
 
-// 4. Mouse click → play + send
+// Mouse click → play + send
 keys.forEach((key) => {
   key.addEventListener("click", () => {
     const noteName = key.dataset.note;
@@ -96,7 +96,7 @@ keys.forEach((key) => {
   });
 });
 
-// 5. Keyboard mapping + chords
+// Keyboard mapping + chords
 const keyToNote = {
   a: "C",
   w: "Csharp",
