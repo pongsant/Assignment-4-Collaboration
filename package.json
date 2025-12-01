@@ -1,5 +1,5 @@
 {
-  "name": "assignment-4-collaboration",
+  "name": "assignment-4",
   "version": "1.0.0",
   "description": "Soft Hands Mini Piano - real-time collaborative mini piano with Node.js and WebSockets",
   "main": "server.js",
