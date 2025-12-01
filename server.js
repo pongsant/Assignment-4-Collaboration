@@ -1,5 +1,5 @@
 // server.js
-// Node + Express + WebSocket server for Soft Hands Mini Piano
+// Node + Express + WebSocket server for Mini Piano
 
 const express = require("express");
 const http = require("http");
